@@ -11,8 +11,6 @@ epsilon = 12.9 ;
 syms Vh x;
 S = solve (e*Vh /(k*T) + log((Nd/Nd_plus) + 0.5*(e*Vh/(k*T))^2) == 0, Vh); %calculates potential across HLJ
 Wa = sqrt(2*epsilon*k*T/(e^2*Nd))*atan(e*S/(sqrt(2)*k*T)*sqrt(Nd_plus/Nd)); % calculates vpa with previous Vh calculated
- tu lis ce message ? 
- bonjour
 
 
 
