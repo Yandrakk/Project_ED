@@ -19,6 +19,7 @@ epsilon = 12.9 *8.8541878176e-12 ;
 Dp_plus = 400e-4 * k*T/e; %µ * k*T./e
 Dp = Dp_plus; % most likely we don't care about doping 
 Sp = 3e3; % m*s-1
+Sp_plus = 3e3; 
 syms Vh ; 
 %S = solve (e*Vh /(k*T) + log((Nd./range_ndplus) + 0.5*(e*Vh/(k*T))^2) == 0, Vh); %calculates potential across HLJ
 %Wa = sqrt(2*epsilon*k*T./(e^2*Nd))*atan(e*S/(sqrt(2)*k*T)*sqrt(range_ndplus./Nd)); % calculates vpa with previous Vh
@@ -29,11 +30,14 @@ Fh_1 = 1./(1+(Senn_plus./Sen_plus_n).*(range_ndplus./Nd));
 Fh_1_corrected= Fh_1 *sech(Wn/Lp);
 figure;
 semilogx(range_ndplus,Fh_1,range_ndplus,Fh_1_corrected);
-M = a(lambda);
-  
-Tau = f(1-0.05)*e*Lp_plus*a(lambda)/(-1+(a(lambda)*Lp_plus)^2); % R = 0.05, black material, as your soul
-Jn0_plus_x1 = Tau * (-a(lambda)*Lp_plus*exp(-a(lambda)*Wn_plus) + (((Sp*Lp_plus/Dp_plus) + a(lambda)*Lp_plus - exp(-a(lambda)*Wn_plus)*((Sp*Lp_plus*cosh(Wn_plus/Lp_plus)/Dp_plus) + sinh(Wn_plus/Lp_plus)))/((Sp*Lp_plus*sinh(Wn_plus/Lp_plus)/Dp_plus) + cosh(Wn_plus/Lp_plus))));
+f_lambda = arrayfun(@f, lambda); 
+a_lambda = arrayfun(@a, lambda);
  
+  
+Tau = f_lambda*(1-0.05)*e*Lp_plus*a_lambda./(-1+(a_lambda*Lp_plus).^2); % R = 0.05, black material, as your soul
+Jn0_plus_x1 = Tau .* ((-a_lambda*Lp_plus).*exp(-a_lambda*Wn_plus) + (((Sp*Lp_plus/Dp_plus) + a_lambda*Lp_plus - exp(-a_lambda*Wn_plus)*((Sp*Lp_plus*cosh(Wn_plus/Lp_plus)/Dp_plus) + sinh(Wn_plus/Lp_plus)))/((Sp*Lp_plus*sinh(Wn_plus/Lp_plus)/Dp_plus) + cosh(Wn_plus/Lp_plus))));
+ plot(lambda,a_lambda);
+
 %Creating functions 
 
 
