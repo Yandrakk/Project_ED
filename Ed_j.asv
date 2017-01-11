@@ -27,7 +27,7 @@ Sen_plus_n = (range_ndplus./Nd)*(Dp/Lp)*coth(Wn/Ln);
 Fh_1 = 1./(1+(Senn_plus./Sen_plus_n).*(range_ndplus./Nd));
 Fh_1_corrected= Fh_1 *sech(Wn/Lp);
 figure;
-semilogx(range_ndplus,Fh_1,range_ndplus,Fh_1_corrected);
+semilogx(range_ndplus,Fh_1,range_ndplus,);
  
 %Creating functions 
 
