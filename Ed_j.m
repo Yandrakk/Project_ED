@@ -20,6 +20,7 @@ Dp = Dp_plus; % most likely we don't care about doping
 Sp = 3e3; % m*s-1
 syms Vh x, 
 %S = solve (e*Vh /(k*T) + log((Nd./range_ndplus) + 0.5*(e*Vh/(k*T))^2) == 0, Vh); %calculates potential across HLJ
+%Wa = sqrt(2*epsilon*k*T./(e^2*Nd))*atan(e*S/(sqrt(2)*k*T)*sqrt(Nd_plus/Nd)); % calculates vpa with previous Vh 
 Senn_plus = (Nd./range_ndplus) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus));
 Sen_plus_n = (range_ndplus./Nd)*(Dp/Lp)*coth(Wn/Ln);
 Fh_1 = 1./(1+(Senn_plus./Sen_plus_n).*(range_ndplus./Nd));
