@@ -1,0 +1,10 @@
+function F = f(lambda) ;
+if (0.24e-6 <= lambda <= 0.48e-6)
+    F = 1.5*(19.7*lambda -4.7)*10^15;
+ 
+elseif (0.48e-6 < lambda <= 1.08e-6)
+    F = 1.5*(-2.5*lambda + 5.7)*10^15;
+end 
+
+
+end 
