@@ -7,7 +7,7 @@ W = 4.5*10^(-6); %m
 Wn_plus = 0.01e-6; %m
 Wn = 0.9e-6; %m
 e = 1.6*10^(-19);
-lambda = [0.1: 0.01 : 1] ;  % en µ frr 
+lambda = [0.24: 0.01 : 1] ;  % en µ frr 
 range_ndplus = [10^22 : 10^20 : 10^26];
 Nd = 2e22*ones(1,length(range_ndplus)); %m-3
 % Nd_plus = 8*10^24; %m-3
@@ -34,9 +34,9 @@ f_lambda = arrayfun(@f, lambda);
 a_lambda = arrayfun(@a, lambda);
  
   
-Tau = f_lambda*(1-0.05)*e*Lp_plus*a_lambda./(-1+(a_lambda*Lp_plus).^2); % R = 0.05, black material, as your soul
+Tau = f_lambda.*((1-0.05)*e*Lp_plus*a_lambda)./(-1+(a_lambda*Lp_plus).^2); % R = 0.05, black material, as your soul
 Jn0_plus_x1 = Tau .* ((-a_lambda*Lp_plus).*exp(-a_lambda*Wn_plus) + (((Sp*Lp_plus/Dp_plus) + a_lambda*Lp_plus - exp(-a_lambda*Wn_plus)*((Sp*Lp_plus*cosh(Wn_plus/Lp_plus)/Dp_plus) + sinh(Wn_plus/Lp_plus)))/((Sp*Lp_plus*sinh(Wn_plus/Lp_plus)/Dp_plus) + cosh(Wn_plus/Lp_plus))));
- plot(lambda,a_lambda);
+ plot(lambda,Jn0_plus_x1);
 
 %Creating functions 
 
