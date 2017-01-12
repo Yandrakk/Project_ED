@@ -4,15 +4,15 @@ clear all
 k = physconst('Boltzman'); 
 T = 300;
 W = 4.5*10^(-6); %m
-Wn_plus = 0.01e-6; %m
+Wn_plus = 0.05e-6; %m
 Wn = 0.9e-6; %m
 Wp = 3e-6; %m
-Wn_range = [0.2e-6 : 1e-8 : 2.5e-6]; %wn range pour tracer photocurrent density en fonction de Wn
+Wn_range = [0e-6 : 1e-8 : 2.5e-6]; %wn range pour tracer photocurrent density en fonction de Wn
 e = 1.6*10^(-19);
 lambda = [0.24: 0.01 : 1] ; % en µ
 lambda_fixe = 0.4; % en µ on prend celle qui donne le plus de courant 
 range_ndplus = [10^22 : 10^20 : 10^26];
-Nd_plus = 2e25 ; % m-3 
+Nd_plus = 2e24 ; % m-3 
 Nd = 2e22; %m-3
 % Nd_plus = 8*10^24; %m-3
 
@@ -26,6 +26,7 @@ Dn = 200e-4; % m2.s-1 electron diffusivité (in p zone )
 Sp = 3e3; % m*s-1
 Sp_plus = 3e3; 
 Sb = 1e5 ;  % surface recombination velocity in p-type gaas
+ni= 1.8e12;
 syms Vh ; 
 S = solve (e*Vh /(k*T) + log((Nd/Nd_plus) + 0.5*(e*Vh/(k*T))^2) == 0, Vh); %calculates potential across HLJ
 Wa = sqrt(2*epsilon*k*T./(e^2*Nd))*atan(e*S/(sqrt(2)*k*T)*sqrt(Nd_plus/Nd)); % calculates vpa with previous Vh
@@ -47,8 +48,11 @@ Jn0_plus_x1_lambda = Tau .* ((-a_lambda*Lp_plus).*exp(-a_lambda*Wn_plus) + (((Sp
 %plot(lambda,Jn0_plus_x1_lambda);
 
 %Photocurent density en fonction de Wn
-Senn_plus_Wn = (Nd/Nd_plus) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %ne depend pas de Wn donc blc
-Sen_plus_n_Wn = (Nd_plus/Nd)*(Dp/Lp)*coth(Wn_range/Ln); %depend de Wn donc matrice
+eta = 1.42*1.6e-19/(k*T);
+nie2 = (ni^2)*exp(2e-2*1.6e-19/(k*T))*(3.057e2)/exp(eta);
+Nd_plus_eff = Nd_plus*ni*ni/nie2
+Senn_plus_Wn = (Nd/Nd_plus_eff) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %ne depend pas de Wn donc blc
+Sen_plus_n_Wn = (Nd_plus_eff/Nd)*(Dp/Lp)*coth(Wn_range/Ln); %depend de Wn donc matrice
 Fh_1_Wn = 1./(1+(Senn_plus_Wn./Sen_plus_n_Wn).*(Nd_plus/Nd));
 Fh_1_corrected_Wn= Fh_1_Wn .*sech(Wn_range./Lp); %matrice
 Tau_lambda_fixe = f(lambda_fixe)*((1-0.05)*e*Lp_plus*a(lambda_fixe))/(-1+(a(lambda_fixe)*Lp_plus)^2); 
@@ -61,11 +65,12 @@ J_p_Wn = -k1.*Lp.*a(lambda_fixe).*exp(-a(lambda_fixe).*Wn_range) + (k1./((Senn_p
 J_n_Wn = k2 * a(lambda_fixe) * Ln - (k2/((Sb*Ln/Dn)*sinh(Wp/Ln) + cosh(Wp/Ln)))*((Sb*Ln/Dn)*(cosh(Wp/Ln) - exp(-a(lambda_fixe)*Wp)) + sinh(Wp/Ln) + a(lambda_fixe)*Ln*exp(-a(lambda_fixe)*Wp)) ;
 
 J_Wd = e * f(lambda_fixe)*(1-0.05)*exp(-a(lambda_fixe)*Wn_range)*(1-exp(-a(lambda_fixe)*W));
-J_tot = J_p_Wn + J_n_Wn + J_Wd + Jn0_plus_x1_Wn + J_Wa_x3_Wn ;
+J_tot = J_p_Wn + J_n_Wn + Jn0_plus_x1_Wn + J_Wa_x3_Wn ;
 figure;
 plot(Wn_range, J_p_Wn,'bo', Wn_range, J_n_Wn, 'gx',Wn_range, J_Wd, 'rs',Wn_range, Jn0_plus_x1_Wn,'yv', Wn_range,J_Wa_x3_Wn,'kd' );
-
-
+figure;
+plot(Wn_range,J_tot)
+%semilogy(lambda,a_lambda);
 
 
 %Creating functions 
