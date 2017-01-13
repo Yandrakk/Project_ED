@@ -2,6 +2,8 @@ clear all
 
 % Variables :
 k = physconst('Boltzman'); 
+h = 6.63e-34; 
+c = physconst('lightspeed');
 T = 300;
 W = 4.5*10^(-6); %m
 Wn_plus = 0.01e-6; %m
@@ -89,6 +91,15 @@ figure;
 plot(Wn_range, J_tot,'mp');
 xlabel('Wn (m)');
 ylabel ('Photocurrent mA/cm²');
+
+%Internal quantum efficiency VS lambda (we don(t take in account
+%reflectance and transmission across the cell
+ P_in = 906; % W/m2 according to AM = 1.5
+
+nb_photons_impinging = P_in .* lambda /(h * c) %nb photons *s-1*m-2 whose energy is h*c/kam
+nb_carriers_generated = J_tot_lambda 
+
+
 
 
  
