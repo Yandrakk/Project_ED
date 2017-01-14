@@ -12,7 +12,7 @@ Wp = 3e-6; %m
 Wn_range = [0.001e-6 : 5e-9 : 5e-6]; %wn range pour tracer photocurrent density en fonction de Wn
 e = 1.6*10^(-19);
 lambda = [0.24: 0.01 : 1] ; % en µ
-lambda_fixe = 0.4; % en µ on prend celle qui donne le plus de courant 
+lambda_fixe = 0.7; % en µ on prend celle qui donne le plus de courant 
 range_ndplus = [10^22 : 10^20 : 10^26];
 Nd_plus = 2e25 ; % m-3 
 Nd = 2e22; %m-3
@@ -62,10 +62,10 @@ J_n_lambda = k2_lambda .* a_lambda .* Ln - (k2_lambda./((Sb*Ln/Dn)*sinh(Wp/Ln) +
 
 J_Wd_lambda = e .* f_lambda.*(1-0.05).*exp(-a_lambda*Wn).*(1-exp(-a_lambda*W));
 J_tot_lambda = Jn0_plus_x1_lambda + J_Wa_x3_lambda +J_p_lambda +J_n_lambda +J_Wd_lambda;
-% figure;
-% plot(lambda, J_tot_lambda, 'md');
-% figure;
-% plot(lambda, J_p_lambda,'bo', lambda, J_n_lambda, 'gx',lambda, J_Wd_lambda, 'rs',lambda, Jn0_plus_x1_lambda,'yv', lambda,J_Wa_x3_lambda,'kd' );
+ figure;
+ plot(lambda, J_tot_lambda, 'md');
+ figure;
+ plot(lambda, J_p_lambda,'bo', lambda, J_n_lambda, 'gx',lambda, J_Wd_lambda, 'rs',lambda, Jn0_plus_x1_lambda,'yv', lambda,J_Wa_x3_lambda,'kd' );
 
 %Photocurent density en fonction de Wn
 Senn_plus_Wn = (Nd/Nd_plus) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %ne depend pas de Wn donc blc
@@ -82,15 +82,15 @@ J_p_Wn = -k1.*Lp.*a(lambda_fixe).*exp(-a(lambda_fixe).*Wn_range) + (k1./((Senn_p
 J_n_Wn = k2 * a(lambda_fixe) * Ln - (k2/((Sb*Ln/Dn)*sinh(Wp/Ln) + cosh(Wp/Ln)))*((Sb*Ln/Dn)*(cosh(Wp/Ln) - exp(-a(lambda_fixe)*Wp)) + sinh(Wp/Ln) + a(lambda_fixe)*Ln*exp(-a(lambda_fixe)*Wp)) ;
 
 J_Wd = e * f(lambda_fixe)*(1-0.05)*exp(-a(lambda_fixe)*Wn_range)*(1-exp(-a(lambda_fixe)*W));
-% J_tot = J_p_Wn + J_n_Wn  + Jn0_plus_x1_Wn + J_Wa_x3_Wn + J_Wd ;
-% figure;
-% plot(Wn_range, J_p_Wn,'bo', Wn_range, J_n_Wn, 'gx',Wn_range, J_Wd, 'rs',Wn_range, Jn0_plus_x1_Wn,'yv', Wn_range,J_Wa_x3_Wn,'kd' );
-% xlabel('Wn (m)');
-% ylabel ('Photocurrent mA/cm²');
-% figure;
-% plot(Wn_range, J_tot,'mp');
-% xlabel('Wn (m)');
-% ylabel ('Photocurrent mA/cm²');
+ J_tot = J_p_Wn + J_n_Wn  + Jn0_plus_x1_Wn + J_Wa_x3_Wn + J_Wd ;
+ figure;
+ plot(Wn_range, J_p_Wn,'bo', Wn_range, J_n_Wn, 'gx',Wn_range, J_Wd, 'rs',Wn_range, Jn0_plus_x1_Wn,'yv', Wn_range,J_Wa_x3_Wn,'kd' );
+ xlabel('Wn (m)');
+ ylabel ('Photocurrent mA/cm²');
+ figure;
+ plot(Wn_range, J_tot,'mp');
+ xlabel('Wn (m)');
+ ylabel ('Photocurrent mA/cm²');
 
 %Internal quantum efficiency VS lambda (we don(t take in account
 %reflectance and transmission across the cell
@@ -101,7 +101,9 @@ nb_carriers_generated = J_tot_lambda  * 6.241e18 ;% np charges elementaires s-1 
 IQE_lambda = nb_carriers_generated./nb_photons_impinging;
 figure;
 plot(lambda,IQE_lambda);
-
+title('IQE');
+figure;
+plot(lambda,a_lambda)
 
 
 
