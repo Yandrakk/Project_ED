@@ -52,6 +52,7 @@ figure;
 semilogx(range_ndplus,Fh_1,range_ndplus,Fh_1_corrected);
 f_lambda = arrayfun(@f, lambda); 
 a_lambda = arrayfun(@a, lambda);
+%bien
  
 % Photocurrent density en fonction de lambda   
 Senn_plus_lambda = (Nd/Nd_plus) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %ne depend pas de lambda donc blc
