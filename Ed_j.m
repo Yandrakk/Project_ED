@@ -23,7 +23,10 @@ q=e;
 lambda = [0.26: 0.01 : 1] ; % en µ
 lambda_fixe = 0.7; % en µ on prend celle qui donne le plus de courant 
 range_ndplus = [10^22 : 10^20 : 10^26];
-Nd_plus = 2e25 ; % m-3 
+Nd_plus = 2e25 ;
+Nd_plus_1 = 2e23;
+Nd_plus_2 = 2e22;
+% m-3 
 Nd = 2e22; %m-3
 Na = 2e25; %m-3
 tau_p = 0.1e-6/sqrt((Nd*10^(-6)-10^16)/10^16) ; %formule photo
@@ -186,6 +189,33 @@ plot(lambda,IQE_lambda);
 title('Internal quantum efficiency VS wavelength');
 xlabel('lambda (µm)');
 ylabel('IQE');
+Senn_plus_lambda_1 = (Nd/Nd_plus_1) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %effect of n+ on the n carriers 
+Senn_plus_lambda_2= (Nd/Nd_plus_2) * (Dp_plus / Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus / Lp_plus))/(1+ (Sp*Lp_plus/Dp_plus)* tanh(Wn_plus/Lp_plus)); %effect of n+ on the n carriers 
+
+Sen_plus_n_lambda_1 = (Nd_plus_1/Nd)*(Dp/Lp)*coth(Wn/Ln); %effect of the n region on the n+ carriers 
+Sen_plus_n_lambda_2 = (Nd_plus_2/Nd)*(Dp/Lp)*coth(Wn/Ln); %effect of the n region on the n+ carriers 
+
+Fh_1_lambda_1 = 1/(1+(Senn_plus_lambda_1./Sen_plus_n_lambda_1)*(Nd_plus_1/Nd));
+Fh_1_lambda_2 = 1/(1+(Senn_plus_lambda_2./Sen_plus_n_lambda_2)*(Nd_plus_2/Nd));
+
+Fh_1_corrected_lambda_1= Fh_1_lambda_1 *sech(Wn/Lp); 
+Fh_1_corrected_lambda_2= Fh_1_lambda_2 *sech(Wn/Lp); 
+
+Jn0_plus_x1_lambda_1 = Fh_1_corrected_lambda_1*Tau .* ((-a_lambda*Lp_plus).*exp(-a_lambda*Wn_plus) + (((Sp*Lp_plus/Dp_plus) + a_lambda*Lp_plus - exp(-a_lambda*Wn_plus)*((Sp*Lp_plus*cosh(Wn_plus/Lp_plus)/Dp_plus) + sinh(Wn_plus/Lp_plus)))/((Sp*Lp_plus*sinh(Wn_plus/Lp_plus)/Dp_plus) + cosh(Wn_plus/Lp_plus)))); 
+Jn0_plus_x1_lambda_2 = Fh_1_corrected_lambda_2*Tau .* ((-a_lambda*Lp_plus).*exp(-a_lambda*Wn_plus) + (((Sp*Lp_plus/Dp_plus) + a_lambda*Lp_plus - exp(-a_lambda*Wn_plus)*((Sp*Lp_plus*cosh(Wn_plus/Lp_plus)/Dp_plus) + sinh(Wn_plus/Lp_plus)))/((Sp*Lp_plus*sinh(Wn_plus/Lp_plus)/Dp_plus) + cosh(Wn_plus/Lp_plus)))); 
+
+J_tot_lambda_1 = Jn0_plus_x1_lambda_1 + J_Wa_x3_lambda +J_p_lambda +J_n_lambda +J_Wd_lambda;
+J_tot_lambda_2=  Jn0_plus_x1_lambda_2 + J_Wa_x3_lambda +J_p_lambda +J_n_lambda +J_Wd_lambda;
+
+nb_carriers_generated_1 = J_tot_lambda_1  * 6.241e18 ;% np charges elementaires s-1 m-2
+nb_carriers_generated_2 = J_tot_lambda_2  * 6.241e18 ;% np charges elementaires s-1 m-2
+
+IQE_lambda_1 = nb_carriers_generated_1./nb_photons_impinging;
+IQE_lambda_2 = nb_carriers_generated_2./nb_photons_impinging;
+
+
+plot(lambda,IQE_lambda, lambda, IQE_lambda_1, lambda,IQE_lambda_2);
+
 
  
 
