@@ -124,7 +124,7 @@ J_tot_lambda_4 =  Jn0_plus_x1_lambda_4 + J_Wa_x3_lambda_4 +J_p_lambda +J_n_lambd
  figure;
  plot(lambda, J_tot_lambda,'r-', lambda, J_tot_lambda_1,'y-', lambda, J_tot_lambda_2,'g-', lambda, J_tot_lambda_3,'k-', lambda, J_tot_lambda_4,'b-');
  title('Total photocurrent density VS wavelength')
- legend('Wn_plus = 0.01e-6','Wn_plus = 0.02e-6','Wn_plus = 0.03e-6','Wn_plus = 0.04e-6','Wn_plus = 0.05e-6')
+ legend('Wn_plus = 0.01e-6','Wn_plus = 0.02e-6','Wn_plus = 0.03e-6','Wn_plus = 0.04e-6','Wn_plus = Re-6')
  ylabel('Photocurrent density A/m2');
  xlabel('wavelength (µm)');
 
@@ -154,15 +154,15 @@ J_tot = J_p_Wn + J_n_Wn  + Jn0_plus_x1_Wn + J_Wa_x3_Wn + J_Wd ;
 figure;
 hold on;
 plot(Wn_range, J_n_Wn,'mx');
-
+legend(');
 plot(Wn_range,J_p_Wn,'co');
-
+legend('p contribution');
 plot(Wn_range, Jn0_plus_x1_Wn,'bs');
-
+legend('n+ contribution');
 plot(Wn_range,J_Wa_x3_Wn,'gd');
-
+legend('Wa contribution');
 plot(Wn_range, J_Wd,'kd');
-legend('n contribution', 'p contribution','n+ contribution','Wa contribution', 'Wd contribution');
+legend('n contribution,'Wd contribution');
 title('contribution to photocurrent VS Wn thickness');
 
 xlabel('Wn (m)');
