@@ -24,8 +24,8 @@ lambda = [0.26: 0.01 : 1] ; % en µ
 lambda_fixe = 0.7; % en µ on prend celle qui donne le plus de courant 
 range_ndplus = [10^22 : 10^20 : 10^26];
 Nd_plus = 5e25 ;
-Nd_plus_1 = 2e23;
-Nd_plus_2 = 2e22;
+Nd_plus_1 = 1e25;
+Nd_plus_2 = 5e24;
 % m-3 
 Nd = 2e22; %m-3
 Nd_1 = 6e23;
@@ -265,10 +265,27 @@ plot(lambda, IQE_lambda,lambda,IQE_lambda_111,lambda,IQE_lambda_222,lambda,IQE_l
 
 
 
+%plot of Senn+ VS Wn+ at differents doping of N+
+tau_p_plus_1 = 0.1e-6/sqrt((Nd_plus_1*10^(-6)-10^16)/10^16) ; %formule photo
+tau_p_plus_2 = 0.1e-6/sqrt((Nd_plus_2*10^(-6)-10^16)/10^16) ; %formule photo
+
+Dp_plus_1 = 26e-7/(2.5e-3 + 4e-21*Nd_plus_1*10^(-6));    
+Dp_plus_2 = 26e-7/(2.5e-3 + 4e-21*Nd_plus_2*10^(-6));    
+
+Lp_plus_1 = sqrt(Dp_plus_1*tau_p_plus_2); %m    diffusion length of minority carriers in n+zone variation of minority-carrier diffusion length with carier concentration in GaAs liquid-phase epitaxial layers
+Lp_plus_2 = sqrt(Dp_plus_2*tau_p_plus_2); %m    diffusion length of minority carriers in n+zone variation of minority-carrier diffusion length with carier concentration in GaAs liquid-phase epitaxial layers
 
 
 
+Senn_plus_Wn_plus = (Nd/Nd_plus) .* (Dp_plus/ Lp_plus) * ((Sp * Lp_plus / Dp_plus )+ tanh(Wn_plus_range / Lp_plus))./(1+ (Sp*Lp_plus/Dp_plus).* tanh(Wn_plus_range./Lp_plus)); %effect of n+ on the n carriers 
 
-
+Senn_plus_Wn_plus_1 = (Nd/Nd_plus_1) .* (Dp_plus_1 / Lp_plus_1) .* ((Sp * Lp_plus_1 / Dp_plus_1 )+ tanh(Wn_plus_range / Lp_plus_1))./(1+ (Sp*Lp_plus_1/Dp_plus_1).* tanh(Wn_plus_range./Lp_plus_1)); %effect of n+ on the n carriers 
+Senn_plus_Wn_plus_2 = (Nd/Nd_plus_2) .* (Dp_plus_2 / Lp_plus_2) .* ((Sp * Lp_plus_2 / Dp_plus_2 )+ tanh(Wn_plus_range / Lp_plus_2))./(1+ (Sp*Lp_plus_2/Dp_plus_2).* tanh(Wn_plus_range/Lp_plus_2)); %effect of n+ on the n carriers 
+figure; 
+plot(Wn_plus_range,Senn_plus_Wn_plus,Wn_plus_range,Senn_plus_Wn_plus_1,Wn_plus_range,Senn_plus_Wn_plus_2);
+title('Senn_plus VS Wn_plus');
+ylabel('Efecctive recombination velocity m*s-1');
+xlabel('Wn+ thickness [m]');
+legend('Nd+ = 5e25 m-3','Nd+ = 1e25 m-3','Nd+ = 5e24 m-3');
 
 
